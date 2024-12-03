@@ -46,15 +46,30 @@ public static class DayTwo
 
     private static bool Check(List<int> arr)
     {
-        var a = arr.CheckIfAscending();
-        var b = arr.CheckIfDescending();
-        if (!(a || b))
+        var isAscending = true;
+        var isDescending = true;
+        var isDiffInRange = true;
+        for (var i = 0; i < arr.Count - 1; i++)
         {
-            return false;
+            var diff = arr[i] - arr[i + 1];
+            if (diff > 0)
+            {
+                isDescending = false;
+            }
+
+            if (diff < 0)
+            {
+                isAscending = false;
+            }
+
+            if (!(Math.Abs(arr[i] - arr[i + 1]) is >= 1 and < 4))
+            {
+                isDiffInRange = false;
+                break;
+            }
         }
 
-        var c = arr.CheckForDifference();
-        return (a || b) && c;
+        return isDiffInRange && (isAscending || isDescending);
     }
 
     private static string GetContentFromFile(string filename)
@@ -68,53 +83,6 @@ public static class DayTwo
         } while (!reader.EndOfStream);
 
         return input;
-    }
-
-    private static bool CheckIfAscending(this List<int> arr)
-    {
-        var isAscending = false;
-        for (var i = 0; i < arr.Count - 1; i++)
-        {
-            isAscending = arr[i] > arr[i + 1];
-            if (!isAscending)
-            {
-                return isAscending;
-            }
-        }
-
-        return isAscending;
-    }
-
-    private static bool CheckIfDescending(this List<int> arr)
-    {
-        var isDescending = true;
-        for (var i = 0; i < arr.Count - 1; i++)
-        {
-            isDescending = arr[i] < arr[i + 1];
-            if (!isDescending)
-            {
-                return isDescending;
-            }
-        }
-
-        return isDescending;
-    }
-
-    private static bool CheckForDifference(this List<int> arr)
-    {
-        var moreThanTwoDifference = false;
-        for (var i = 0; i < arr.Count - 1; i++)
-        {
-            var d = Math.Abs(arr[i] - arr[i + 1]);
-            moreThanTwoDifference = !(Math.Abs(arr[i] - arr[i + 1]) is >= 1 and < 4);
-
-            if (moreThanTwoDifference)
-            {
-                return !moreThanTwoDifference;
-            }
-        }
-
-        return !moreThanTwoDifference;
     }
 
     private static List<int> RemoveItemAtIndex(this List<int> arr, int index)
